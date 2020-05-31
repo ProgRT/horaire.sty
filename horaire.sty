@@ -1,0 +1,39 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{horaire}[2020/02/23 Mise en forme d'horaires]
+
+\def\minutestotime#1{%
+\newcount\hours%
+\newcount\hoursinminutes%
+\newcount\minutes%
+\hours=#1%
+\divide\hours by 60%
+\hoursinminutes=\hours%
+\multiply\hoursinminutes by 60%
+\minutes=#1%
+\advance\minutes by -\hoursinminutes%
+\number\hours\hskip1pt:\hskip1pt \ifnum\minutes<10{0\number\minutes}\else{\number\minutes}\fi
+}
+
+\newenvironment{horaire}[1]
+{
+\newcount\actstarttime
+\newcount\curenttime
+\curenttime=#1
+
+\newcommand{\activite}[2]{%
+\actstarttime = \curenttime%
+\global\advance\curenttime by ##1%
+\minutestotime\actstarttime & ##2 & \scriptsize ##1~min.\\
+	 }
+
+\begin{tabular}{r l c}
+\hline
+}
+{
+\hline
+\end{tabular}
+}
+
+\newcommand{\contenu}[1]{%
+	& \footnotesize \it #1 & \\
+}
